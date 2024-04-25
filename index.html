@@ -1,0 +1,101 @@
+<!DOCTYPE HTML>
+<html lang="ja">
+<title>Math Woder Land</title>
+
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+  <meta charset="UTF-8" name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta property="og:title" content="MediaPipe Hand" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="./ogp.png" />
+  <meta name="description"
+    content="GoogleのAIライブラリ「MediaPipe」を使ってみました。Handでは、カメラから手を認識してくれます。カメラを通して手を認識すると、関節の骨組みが表示されます。スポーツ・医療現場での利用を考えていきます。" />
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MediaPipe Hand" />
+  <meta name="twitter:image" content="./ogp.png" />
+  <meta name="author" content="仁志">
+  <meta name="keywords" content="MediaPipe, hand, Google, MediaPipe Hand" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    html {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #ffffff;
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+
+    }
+
+    #particles-js {
+      position: relative;
+      width: 100%;
+      height: 95%;
+      background-size: cover;
+      background-repeat: no-repeat;
+      padding: 0;
+      margin: 0;
+      z-index: 0;
+    }
+
+    h1 {
+      color: #ffffff;
+    }
+
+    .header {
+      width: 100%;
+      position: fixed;
+      top: 0;
+      z-index: 100;
+      background: #1e50a2;
+    }
+
+    .footer{
+      width: 100%;
+      position: fixed;
+      bottom: 0;
+      z-index: 100;
+      background: #1e50a2;
+      color: #ffffff;
+    }
+  </style>
+</head>
+
+<body>
+
+  <body>
+
+    <div id="particles-js">
+    </div>
+
+    <div class="header text-center">
+      <h1 class="text-3xl my-3">Math Woder Land</h1>
+    </div>
+
+    <div class="footer text-center">
+      &copy 齋藤　仁志
+      </div>
+
+    <script type="text/javascript" src="js/particles.min.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-MPP84V2NHB"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date());
+
+      gtag('config', 'G-MPP84V2NHB');
+    </script>
+
+  </body>
+
+</html>
