@@ -1,22 +1,60 @@
 <!DOCTYPE HTML>
 <html lang="ja">
 <title>Math World</title>
+
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
-<meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" >
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta property="og:title" content="Math World" />
-<meta property="og:type" content="website" />
-<meta property="og:image" content="https://math-world2s/images/ogp.png" />
-<meta name="description" content="ここは数学の世界です。公式や証明、数の不思議さ、などなど、数学の世界を感じてもらえたら幸いです・" />
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Math World" />
-<meta name="twitter:image" content="https://math-world2s/images/ogp.png" />
-<meta name="author" content="Saito Hitoshi">
-<meta name="keywords" content="数学,math,公式,証明,数字"/>
-<link rel="apple-touch-icon" href="./images/apple-touch-icon.png">
-<link rel="icon" href="./images/apple-touch-icon.png">
+  <meta charset="UTF-8" name="viewport"
+    content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta property="og:title" content="Math World" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://math-world2s/images/ogp.png" />
+  <meta name="description" content="ここは数学の世界です。公式や証明、数の不思議さ、などなど、数学の世界を感じてもらえたら幸いです・" />
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Math World" />
+  <meta name="twitter:image" content="https://math-world2s/images/ogp.png" />
+  <meta name="author" content="Saito Hitoshi">
+  <meta name="keywords" content="数学,math,公式,証明,数字" />
+  <link rel="apple-touch-icon" href="./images/apple-touch-icon.png">
+  <link rel="icon" href="./images/apple-touch-icon.png">
 
   <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Katex -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+    integrity="sha384-n8MVd4RsNIU0tAv4ct0nTaAbDJwPJzDEaqSD1odI+WdtXRGWt2kTvGFasHpSy3SV" crossorigin="anonymous">
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
+    integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8"
+    crossorigin="anonymous"></script>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/mhchem.min.js"
+    integrity="sha384-ifpG+NlgMq0kvOSGqGQxW1mJKpjjMDmZdpKGq3tbvD3WPhyshCEEYClriK/wRVU0"
+    crossorigin="anonymous"></script>
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+    crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"
+    integrity="sha512-GWzVrcGlo0TxTRvz9ttioyYJ+Wwk9Ck0G81D+eO63BaqHaJ3YZX9wuqjwgfcV/MrB2PhaVX9DkYVhbFpStnqpQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+  <!-- $などで囲うために必要 -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "\\[", right: "\\]", display: true },
+          { left: "$", right: "$", display: false }
+        ]
+      });
+    });
+  </script>
+
   <style>
     html {
       width: 100%;
@@ -35,9 +73,9 @@
     }
 
     #particles-js {
-      position: relative;
+      position: fixed;
       width: 100%;
-      height: 95%;
+      height: 100%;
       background-size: cover;
       background-repeat: no-repeat;
       padding: 0;
@@ -57,7 +95,23 @@
       background: #1e50a2;
     }
 
-    .footer{
+    .main {
+      position: absolute;
+      margin: 120px 0 30px 0;
+      z-index: 200;
+      width: 90%;
+      max-width: 600px;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    #test{
+      padding: 15px;
+      border: 1px solid #000000;
+      border-radius: .5em;
+    }
+
+    .footer {
       width: 100%;
       position: fixed;
       bottom: 0;
@@ -67,15 +121,15 @@
     }
   </style>
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-MPP84V2NHB"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag() { dataLayer.push(arguments); }
-gtag('js', new Date());
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-MPP84V2NHB"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
 
-gtag('config', 'G-MPP84V2NHB');
-</script>
+    gtag('config', 'G-MPP84V2NHB');
+  </script>
 
 </head>
 
@@ -90,9 +144,34 @@ gtag('config', 'G-MPP84V2NHB');
       <h1 class="text-3xl my-3">Math World</h1>
     </div>
 
-    <div class="footer text-center">
-      &copy 齋藤　仁志
+    <div class="main">
+      
+      <div id="test">
+      
+      $指数関数のルール$<br>
+      $a^0は1。a^{-1}は\dfrac{1}{a}と扱う。$
       </div>
+
+      
+    </div>
+
+    <!-- フッター -->
+    <div id="footer" class="footer p-2 text-center">
+
+      <div class="grid gap-4 grid-cols-3 grid-rows-1">
+        <div class="search-btn"><i class="fa-solid fa-magnifying-glass"></i> 検　索</div>
+        <a href="./index.html">
+          <div><i class="fa-solid fa-house"></i> ホーム</div>
+        </a>
+        <div class="manual-btn"><i class="fa-solid fa-book"></i> 使い方</div>
+      </div>
+
+      <p class="text-xs mt-1"><a href="https://github.com/linkevery2s/nationalflag" target="_blank">src on GitHub</a>.
+        &copy <a href="https://hitoshi2s.netlify.app/" target="_blank">齋藤 仁志</a>. <a
+          href="https://docs.google.com/forms/d/e/1FAIpQLSf-WMoBJRTdA1bmN_SmQ-bsNGeLs1l737d3c9BUNuErjH-KBw/viewform"
+          target="_blank">お問い合わせ</a></p>
+
+    </div>
 
     <script type="text/javascript" src="js/particles.min.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
