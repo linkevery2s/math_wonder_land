@@ -39,6 +39,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
     integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"
     integrity="sha512-GWzVrcGlo0TxTRvz9ttioyYJ+Wwk9Ck0G81D+eO63BaqHaJ3YZX9wuqjwgfcV/MrB2PhaVX9DkYVhbFpStnqpQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -95,6 +96,34 @@
       background: #1e50a2;
     }
 
+    input {
+      color: rgba(0, 119, 184, 0.5);
+      font-size: 1.2em;
+      font-weight: bolder;
+      height: 45px;
+      width: 50%;
+      border-radius: .3em;
+    }
+
+    input::-webkit-input-placeholder {
+      color: rgba(0, 119, 184, 0.5);
+    }
+
+    #text {
+      padding-left: 15px;
+    }
+
+    #exp {
+      font-size: 1.2em;
+      font-weight: bolder;
+      height: 45px;
+      background: #88b9eb;
+      color: #fff;
+      padding: .5em;
+      cursor: pointer;
+      border-radius: .3em;
+    }
+
     .main {
       position: absolute;
       margin: 120px 0 30px 0;
@@ -105,7 +134,7 @@
       transform: translate(-50%, -50%);
     }
 
-    #test {
+    #table {
       padding: 15px;
       border: 1px solid #000000;
       border-radius: .5em;
@@ -118,6 +147,55 @@
       z-index: 100;
       background: #1e50a2;
       color: #ffffff;
+    }
+
+
+    .item_title {
+      text-decoration: none;
+      color: rgba(0, 119, 184, 1);
+      font-weight: bolder;
+    }
+
+    .item_title b {
+      color: #666600;
+      background-color: #ffffdd;
+      font-weight: bold;
+      border: 1px solid #bbbb00;
+      margin: 0 2px 0 2px;
+      padding: 0 2px 0 2px;
+    }
+
+    .item_ex {
+      margin: 0.5em 2em 1em 1em;
+      padding: 0.5em;
+      font-size: smaller;
+      border-radius: .5em;
+    }
+
+    .item_ex b {
+      color: #666600;
+      background-color: #ffffdd;
+      font-weight: bold;
+      border: 1px solid #bbbb00;
+      margin: 0 2px 0 2px;
+      padding: 0 2px 0 2px;
+    }
+
+    ul {
+      padding: 0;
+      margin: 0;
+    }
+
+    li {
+      list-style: none;
+      display: inline-block;
+      border: 2px solid #007bbb;
+      color: #007bbb;
+      padding: 1em;
+      border-radius: .5em;
+      margin-right: .5em;
+      cursor: pointer;
+      font-weight: bold;
     }
   </style>
 
@@ -149,41 +227,265 @@
     <div id="particles-js">
     </div>
 
-    <div class="header text-center">
-      <h1 class="text-3xl my-3">Math World</h1>
+    <div class="header text-center p-3">
+      <input type="text" name="text1" id="text" size="15" autocomplete="off" autofocus placeholder="数式の検索" /> <span
+        id="exp">リセット</span>
     </div>
 
     <div class="main">
 
-      <div id="test">
+      <ul id="page_list">
+        <div id="koumoku"></div>
+      </ul>
 
-        $指数関数のルール$<br>
-        $a^0は1。a^{-1}は\dfrac{1}{a}と扱う。$
-      </div>
+      <p><span id="resultCount"></span></p>
 
+      <div id="result"></div>
+
+      <div class="katex"></div>
+
+      <!--<div id="table">
+
+        <div>$指数関数のルール$</div>
+        $a^0=1 , a^{-1}=\dfrac{1}{a}$
+        
+      </div>-->
 
     </div>
 
     <!-- フッター -->
     <div id="footer" class="footer p-2 text-center">
 
-      <div class="grid gap-4 grid-cols-3 grid-rows-1">
-        <div class="search-btn"><i class="fa-solid fa-magnifying-glass"></i> 検　索</div>
-        <a href="./index.html">
-          <div><i class="fa-solid fa-house"></i> ホーム</div>
-        </a>
-        <div class="manual-btn"><i class="fa-solid fa-book"></i> 使い方</div>
-      </div>
-
-      <p class="text-xs mt-1"><a href="https://github.com/linkevery2s/nationalflag" target="_blank">src on GitHub</a>.
+      <p class="text-xs mt-1"><a href="https://github.com/linkevery2s/math_world" target="_blank">src on GitHub</a>.
         &copy <a href="https://hitoshi2s.netlify.app/" target="_blank">齋藤 仁志</a>. <a
           href="https://docs.google.com/forms/d/e/1FAIpQLSf-WMoBJRTdA1bmN_SmQ-bsNGeLs1l737d3c9BUNuErjH-KBw/viewform"
           target="_blank">お問い合わせ</a></p>
 
     </div>
 
+
+
     <script type="text/javascript" src="js/particles.min.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
+
+    <script src="./data/math.json"></script>
+
+    <script type="module">
+
+      let i_bunkatu = 10;// 何行にするか
+
+      /* 最初のロード時 */
+      onload = async () => {
+        result.innerHTML = "";
+
+        let kensaku = text.value;
+
+        const max = data.length;
+        let count = 0;
+
+
+
+        let b = Math.ceil(max / i_bunkatu);
+        console.log(b);
+
+        koumoku.innerHTML = "";
+
+        let bunkatu = [];
+
+        for (let i = 0; i < b; i++) {
+          let v = i + 1;
+          koumoku.innerHTML += '<li onclick="kirikae(' + v + ')">' + v + '</li>';
+
+          bunkatu[i] = "";
+
+          for (let mm = 0; mm < i_bunkatu; mm++) {
+
+            if (i * i_bunkatu + mm < max) {
+
+              bunkatu[i] += '<div id="table">' +
+                '<span class="item_title">' + data[i * i_bunkatu + mm].title + '</span>' +
+                '<div class="item_ex' + mm + '">' + data[i * i_bunkatu + mm].explanation + '</div>' +
+                '</div>';
+
+              console.log(data[i * i_bunkatu + mm].explanation);
+
+              //katex.render(bunkatu[i], element, { throwOnError: false });
+
+              count = count + 1;
+
+            }
+            else { }
+          }
+
+        }
+
+        result.innerHTML = bunkatu[0];
+
+        let element = document.querySelector(".item_ex0");
+
+        console.log(element);
+
+        katex.render(data[0].explanation, element, { throwOnError: false });
+
+        let list = document.querySelector("#page_list");
+        //list.childNodes[0].childNodes[0].style.backgroundColor = "#007bbb";
+        //list.childNodes[0].childNodes[0].style.color = "#ffffff";
+
+        resultCount.innerHTML = '<b>' + count + '</b> 件見つかりました（' + max + '件中）';
+
+        window.kirikae = (x) => {
+
+          result.innerHTML = "";
+
+          result.innerHTML = bunkatu[x - 1];
+
+          for (let i = 0; i < b; i++) {
+
+            if (i == x - 1) {
+
+              list.childNodes[0].childNodes[i].style.backgroundColor = "#007bbb";
+              list.childNodes[0].childNodes[i].style.color = "#ffffff";
+
+            } else {
+
+              list.childNodes[0].childNodes[i].style.backgroundColor = "#ffffff";
+              list.childNodes[0].childNodes[i].style.color = "#007bbb";
+
+            }
+
+
+
+          }
+
+        }
+
+      }
+
+
+      /* 検索ボタン押下時 */
+      document.getElementById('text').addEventListener('keyup',
+
+        async () => {
+
+          if (text.value != "") {
+
+            result.innerHTML = "";
+            koumoku.innerHTML = "";
+
+            let kensaku = text.value;
+
+            let kensaku_arr = [];
+
+            /*let kensaku_b = kensaku.split(/[ 　,、]+/)
+  
+            const kensaku_count = kensaku_b.length;
+  
+            console.log(kensaku_b);*/
+
+            const max = data.length;
+            let count = 0;
+
+            for (let j = 0; j < max; j++) {
+              if (data[j].title.indexOf(kensaku) != -1 || data[j].body.indexOf(kensaku) != -1) {
+                kensaku_arr[j] = '<div class="item">' +
+                  '<span class="item_title">' + data[j].title.replaceAll(kensaku, "<b>" + kensaku + "</b>") + '</span>' +
+                  '<div class="item_ex">' + data[j].body.replaceAll(kensaku, "<b>" + kensaku + "</b>") + '</div>' +
+                  '</div>';
+              } else {
+                kensaku_arr[j] = "";
+              }
+            }
+
+            let new_arr = kensaku_arr.filter(function (x) {
+              return !(x == "");
+            })
+            console.log(new_arr);
+
+            count = new_arr.length;
+
+            let b = Math.ceil(count / i_bunkatu);
+            console.log(b);
+
+            /* 検索結果が0の場合 */
+            if (b == 0) {
+              result.innerHTML = "検索結果はありませんでした。別のキーワードを入力してください。";
+              resultCount.innerHTML = '<b>' + b + '</b> 件見つかりました（' + max + '件中）';
+              return false;
+            } else { }
+
+            let bunkatu2 = [];
+
+
+            for (let i = 0; i < b; i++) {
+              let v = i + 1;
+              koumoku.innerHTML += '<li onclick="kirikae2(' + v + ')">' + v + '</li>';
+
+              bunkatu2[i] = "";
+
+              for (let mm = 0; mm < i_bunkatu; mm++) {
+
+                if (i * i_bunkatu + mm < count) {
+
+                  bunkatu2[i] += new_arr[i * i_bunkatu + mm];
+                }
+                else { }
+              }
+
+            }
+
+
+            result.innerHTML = bunkatu2[0];
+
+            let list = document.querySelector("#page_list");
+            list.childNodes[0].childNodes[0].style.backgroundColor = "#007bbb";
+            list.childNodes[0].childNodes[0].style.color = "#ffffff";
+
+            resultCount.innerHTML = '<b>' + count + '</b> 件見つかりました（' + max + '件中）';
+
+            window.kirikae2 = (x) => {
+
+              result.innerHTML = "";
+
+              result.innerHTML = bunkatu2[x - 1];
+
+              let list = document.querySelector("#page_list");
+
+              for (let i = 0; i < b; i++) {
+
+                if (i == x - 1) {
+
+                  list.childNodes[0].childNodes[i].style.backgroundColor = "#007bbb";
+                  list.childNodes[0].childNodes[i].style.color = "#ffffff";
+
+                } else {
+
+                  list.childNodes[0].childNodes[i].style.backgroundColor = "#ffffff";
+                  list.childNodes[0].childNodes[i].style.color = "#007bbb";
+
+                }
+
+              }
+            }
+
+          } else {
+
+            window.location.reload();
+          }
+
+        }
+
+      );
+
+      document.getElementById('exp').addEventListener('click',
+
+        async () => {
+
+          window.location.reload();
+
+        }
+      );
+
+    </script>
 
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-MPP84V2NHB"></script>

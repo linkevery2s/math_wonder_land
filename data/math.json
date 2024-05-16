@@ -1,8 +1,9 @@
-[
+const data = [
 	{
-		"id": 1,
-		"tile": "指数関数のルール",
-		"overview": "a0は1、a-1は1/aと扱う。",
+		"id": "1",
+		"title": "指数関数のルール",
+		"explanation": "a^0=1",
+		"proof": "",
 		"remarks": ""
 	}
-]
+];
