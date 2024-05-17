@@ -101,7 +101,7 @@
       font-size: 1.2em;
       font-weight: bolder;
       height: 45px;
-      width: 50%;
+      width: 70%;
       border-radius: .3em;
     }
 
@@ -113,31 +113,22 @@
       padding-left: 15px;
     }
 
-    #exp {
-      font-size: 1.2em;
-      font-weight: bolder;
-      height: 45px;
-      background: #88b9eb;
-      color: #fff;
-      padding: .5em;
-      cursor: pointer;
-      border-radius: .3em;
-    }
-
     .main {
       position: absolute;
-      margin: 120px 0 30px 0;
+      margin: 80px 0 30px 0;
       z-index: 10;
       width: 90%;
       max-width: 600px;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%);
     }
 
-    #table {
-      padding: 15px;
+    .table {
+      padding: 10px;
+      margin: 10px 0 10px 0;
       border: 1px solid #000000;
       border-radius: .5em;
+      width: 100%;
     }
 
     .footer {
@@ -149,36 +140,14 @@
       color: #ffffff;
     }
 
+    .footer a {
+      border-bottom: 2px dotted #ffffff;
+    }
+
 
     .item_title {
-      text-decoration: none;
       color: rgba(0, 119, 184, 1);
       font-weight: bolder;
-    }
-
-    .item_title b {
-      color: #666600;
-      background-color: #ffffdd;
-      font-weight: bold;
-      border: 1px solid #bbbb00;
-      margin: 0 2px 0 2px;
-      padding: 0 2px 0 2px;
-    }
-
-    .item_ex {
-      margin: 0.5em 2em 1em 1em;
-      padding: 0.5em;
-      font-size: smaller;
-      border-radius: .5em;
-    }
-
-    .item_ex b {
-      color: #666600;
-      background-color: #ffffdd;
-      font-weight: bold;
-      border: 1px solid #bbbb00;
-      margin: 0 2px 0 2px;
-      padding: 0 2px 0 2px;
     }
 
     ul {
@@ -228,35 +197,20 @@
     </div>
 
     <div class="header text-center p-3">
-      <input type="text" name="text1" id="text" size="15" autocomplete="off" autofocus placeholder="数式の検索" /> <span
-        id="exp">リセット</span>
+      <input type="text" name="text1" id="text" size="15" autocomplete="off" autofocus placeholder="数式の検索" />
+
     </div>
 
     <div class="main">
-
-      <ul id="page_list">
-        <div id="koumoku"></div>
-      </ul>
-
-      <p><span id="resultCount"></span></p>
-
+      <div class="resultCount"></div>
       <div id="result"></div>
-
-      <div class="katex"></div>
-
-      <!--<div id="table">
-
-        <div>$指数関数のルール$</div>
-        $a^0=1 , a^{-1}=\dfrac{1}{a}$
-        
-      </div>-->
 
     </div>
 
     <!-- フッター -->
     <div id="footer" class="footer p-2 text-center">
 
-      <p class="text-xs mt-1"><a href="https://github.com/linkevery2s/math_world" target="_blank">src on GitHub</a>.
+      <p class="text-sm"><a href="https://github.com/linkevery2s/math_world" target="_blank">src on GitHub</a>.
         &copy <a href="https://hitoshi2s.netlify.app/" target="_blank">齋藤 仁志</a>. <a
           href="https://docs.google.com/forms/d/e/1FAIpQLSf-WMoBJRTdA1bmN_SmQ-bsNGeLs1l737d3c9BUNuErjH-KBw/viewform"
           target="_blank">お問い合わせ</a></p>
@@ -272,217 +226,77 @@
 
     <script type="module">
 
-      let i_bunkatu = 10;// 何行にするか
+      const max = data.length;
+      const result = document.querySelector("#result");
+      const resultCount = document.querySelector(".resultCount");
+
+      result.innerHTML = "";
+
+      console.log(max);
 
       /* 最初のロード時 */
       onload = async () => {
-        result.innerHTML = "";
 
-        let kensaku = text.value;
+        for (let i = 0; i < max; i++) {
 
-        const max = data.length;
-        let count = 0;
+          result.innerHTML += '<div class="table">' + '<div class="item_title">' + data[i].title + '</div>' + '<div class="item_ex' + i + '"></div>' + '</div>';
 
+          let item_ex = [];
 
+          item_ex[i] = document.querySelector(".item_ex" + i);
 
-        let b = Math.ceil(max / i_bunkatu);
-        console.log(b);
+          katex.render(data[i].explanation, item_ex[i], { throwOnError: false });
 
-        koumoku.innerHTML = "";
+        };
 
-        let bunkatu = [];
+        resultCount.innerHTML = '<b>' + max + '</b> 件見つかりました（' + max + '件中）';
 
-        for (let i = 0; i < b; i++) {
-          let v = i + 1;
-          koumoku.innerHTML += '<li onclick="kirikae(' + v + ')">' + v + '</li>';
-
-          bunkatu[i] = "";
-
-          for (let mm = 0; mm < i_bunkatu; mm++) {
-
-            if (i * i_bunkatu + mm < max) {
-
-              bunkatu[i] += '<div id="table">' +
-                '<span class="item_title">' + data[i * i_bunkatu + mm].title + '</span>' +
-                '<div class="item_ex' + mm + '">' + data[i * i_bunkatu + mm].explanation + '</div>' +
-                '</div>';
-
-              console.log(data[i * i_bunkatu + mm].explanation);
-
-              //katex.render(bunkatu[i], element, { throwOnError: false });
-
-              count = count + 1;
-
-            }
-            else { }
-          }
-
-        }
-
-        result.innerHTML = bunkatu[0];
-
-        let element = document.querySelector(".item_ex0");
-
-        console.log(element);
-
-        katex.render(data[0].explanation, element, { throwOnError: false });
-
-        let list = document.querySelector("#page_list");
-        //list.childNodes[0].childNodes[0].style.backgroundColor = "#007bbb";
-        //list.childNodes[0].childNodes[0].style.color = "#ffffff";
-
-        resultCount.innerHTML = '<b>' + count + '</b> 件見つかりました（' + max + '件中）';
-
-        window.kirikae = (x) => {
-
-          result.innerHTML = "";
-
-          result.innerHTML = bunkatu[x - 1];
-
-          for (let i = 0; i < b; i++) {
-
-            if (i == x - 1) {
-
-              list.childNodes[0].childNodes[i].style.backgroundColor = "#007bbb";
-              list.childNodes[0].childNodes[i].style.color = "#ffffff";
-
-            } else {
-
-              list.childNodes[0].childNodes[i].style.backgroundColor = "#ffffff";
-              list.childNodes[0].childNodes[i].style.color = "#007bbb";
-
-            }
-
-
-
-          }
-
-        }
-
-      }
+      };
 
 
       /* 検索ボタン押下時 */
-      document.getElementById('text').addEventListener('keyup',
+      document.getElementById('text').addEventListener('input',
 
         async () => {
 
           if (text.value != "") {
 
             result.innerHTML = "";
-            koumoku.innerHTML = "";
 
             let kensaku = text.value;
 
-            let kensaku_arr = [];
-
-            /*let kensaku_b = kensaku.split(/[ 　,、]+/)
-  
-            const kensaku_count = kensaku_b.length;
-  
-            console.log(kensaku_b);*/
-
-            const max = data.length;
             let count = 0;
 
             for (let j = 0; j < max; j++) {
-              if (data[j].title.indexOf(kensaku) != -1 || data[j].body.indexOf(kensaku) != -1) {
-                kensaku_arr[j] = '<div class="item">' +
-                  '<span class="item_title">' + data[j].title.replaceAll(kensaku, "<b>" + kensaku + "</b>") + '</span>' +
-                  '<div class="item_ex">' + data[j].body.replaceAll(kensaku, "<b>" + kensaku + "</b>") + '</div>' +
-                  '</div>';
+
+              if (data[j].title.indexOf(kensaku) != -1 || data[j].explanation.indexOf(kensaku) != -1 || data[j].proof.indexOf(kensaku) != -1 || data[j].remarks.indexOf(kensaku) != -1) {
+
+                result.innerHTML += '<div class="table">' + '<div class="item_title">' + data[j].title + '</div>' + '<div class="item_ex' + j + '"></div>' + '</div>';
+
+                let item_ex = [];
+
+                item_ex[j] = document.querySelector(".item_ex" + j);
+
+                katex.render(data[j].explanation, item_ex[j], { throwOnError: false });
+
+                count += 1;
+
+
               } else {
-                kensaku_arr[j] = "";
-              }
-            }
 
-            let new_arr = kensaku_arr.filter(function (x) {
-              return !(x == "");
-            })
-            console.log(new_arr);
+              };
 
-            count = new_arr.length;
-
-            let b = Math.ceil(count / i_bunkatu);
-            console.log(b);
-
-            /* 検索結果が0の場合 */
-            if (b == 0) {
-              result.innerHTML = "検索結果はありませんでした。別のキーワードを入力してください。";
-              resultCount.innerHTML = '<b>' + b + '</b> 件見つかりました（' + max + '件中）';
-              return false;
-            } else { }
-
-            let bunkatu2 = [];
-
-
-            for (let i = 0; i < b; i++) {
-              let v = i + 1;
-              koumoku.innerHTML += '<li onclick="kirikae2(' + v + ')">' + v + '</li>';
-
-              bunkatu2[i] = "";
-
-              for (let mm = 0; mm < i_bunkatu; mm++) {
-
-                if (i * i_bunkatu + mm < count) {
-
-                  bunkatu2[i] += new_arr[i * i_bunkatu + mm];
-                }
-                else { }
-              }
-
-            }
-
-
-            result.innerHTML = bunkatu2[0];
-
-            let list = document.querySelector("#page_list");
-            list.childNodes[0].childNodes[0].style.backgroundColor = "#007bbb";
-            list.childNodes[0].childNodes[0].style.color = "#ffffff";
+            };
 
             resultCount.innerHTML = '<b>' + count + '</b> 件見つかりました（' + max + '件中）';
-
-            window.kirikae2 = (x) => {
-
-              result.innerHTML = "";
-
-              result.innerHTML = bunkatu2[x - 1];
-
-              let list = document.querySelector("#page_list");
-
-              for (let i = 0; i < b; i++) {
-
-                if (i == x - 1) {
-
-                  list.childNodes[0].childNodes[i].style.backgroundColor = "#007bbb";
-                  list.childNodes[0].childNodes[i].style.color = "#ffffff";
-
-                } else {
-
-                  list.childNodes[0].childNodes[i].style.backgroundColor = "#ffffff";
-                  list.childNodes[0].childNodes[i].style.color = "#007bbb";
-
-                }
-
-              }
-            }
 
           } else {
 
             window.location.reload();
-          }
+          };
 
         }
 
-      );
-
-      document.getElementById('exp').addEventListener('click',
-
-        async () => {
-
-          window.location.reload();
-
-        }
       );
 
     </script>
