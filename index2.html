@@ -28,6 +28,10 @@
     integrity="sha384-XjKyOOlGwcjNTAIQHIpgOno0Hl1YQqzUOEleOLALmuqehneUG+vnGctmUb0ZY0l8"
     crossorigin="anonymous"></script>
 
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/mhchem.min.js"
+    integrity="sha384-ifpG+NlgMq0kvOSGqGQxW1mJKpjjMDmZdpKGq3tbvD3WPhyshCEEYClriK/wRVU0"
+    crossorigin="anonymous"></script>
+
   <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
     integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
     crossorigin="anonymous"></script>
@@ -39,10 +43,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"
     integrity="sha512-GWzVrcGlo0TxTRvz9ttioyYJ+Wwk9Ck0G81D+eO63BaqHaJ3YZX9wuqjwgfcV/MrB2PhaVX9DkYVhbFpStnqpQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/gh/DeuxHuitHuit/quicksearch/dist/jquery.quicksearch.min.js"></script>
 
   <!-- $などで囲うために必要 -->
   <script>
@@ -154,15 +154,18 @@
     ul {
       padding: 0;
       margin: 0;
-      width: 100%;
     }
 
     li {
       list-style: none;
       display: inline-block;
-      padding: 0;
-      margin: 0;
-      width: 100%;
+      border: 2px solid #007bbb;
+      color: #007bbb;
+      padding: 1em;
+      border-radius: .5em;
+      margin-right: .5em;
+      cursor: pointer;
+      font-weight: bold;
     }
   </style>
 
@@ -199,35 +202,10 @@
 
     </div>
 
-    <div class="main" id="list">
-      <ul>
-        <li>
-          <div class="table">
-            <div class="item_title mb-2">指数関数のルール</div>
-            <div class="item_ex">
-              $
-              a^0 = 1 , a^{-1} = \dfrac{1}{a}
-              $
-            </div>
-          </div>
-        </li>
+    <div class="main">
+      <div class="resultCount"></div>
+      <div id="result"></div>
 
-        <li>
-          <div class="table">
-            <div class="item_title mb-2">解の公式</div>
-            <div class="item_ex">
-              $
-              ax^2 + bx + c = 0 (a\ne 0)\\
-              $
-              <br>
-              $
-              x = \dfrac{-b \pm\sqrt{b^2 - 4ac}}{2a}
-              $
-            </div>
-          </div>
-        </li>
-
-      </ul>
     </div>
 
     <!-- フッター -->
@@ -240,14 +218,91 @@
 
     </div>
 
+
+
     <script type="text/javascript" src="js/particles.min.js"></script>
     <script type="text/javascript" src="js/app.js"></script>
 
+    <!--<script src="./data/math.json"></script>-->
+
     <script type="module">
 
+      //const max = data.length;
+      //console.log(max);
+
+      const result = document.querySelector("#result");
+      const resultCount = document.querySelector(".resultCount");
+
+      result.innerHTML = "";
+
+      /* 最初のロード時 */
       onload = async () => {
-        $('#text').quicksearch('#list li');
-      }
+
+        const res = await fetch("https://script.google.com/macros/s/AKfycbzMl22OTIqeOvVUs11_lWZeMnwGRuMURw9LoFfSFPwk38oqywlt92C4mYbQ5HNU54j4ow/exec");
+        const data = await res.json();
+        const max = data.length;
+
+        for (let i = 0; i < max; i++) {
+
+          result.innerHTML += '<div class="table">' + '<div class="item_title">' + data[i].title + '</div>' + '<div class="item_ex' + i + '"></div>' + '</div>';
+
+          let item_ex = [];
+
+          item_ex[i] = document.querySelector(".item_ex" + i);
+
+          katex.render(data[i].explanation, item_ex[i], { throwOnError: false });
+
+        };
+
+        resultCount.innerHTML = '<b>' + max + '</b> 件見つかりました（' + max + '件中）';
+
+      };
+
+
+      /* 検索ボタン押下時 */
+      document.getElementById('text').addEventListener('keyup',
+
+        async () => {
+
+          if (text.value != "") {
+
+            result.innerHTML = "";
+
+            let kensaku = text.value;
+
+            let count = 0;
+
+            for (let j = 0; j < max; j++) {
+
+              if (data[j].title.indexOf(kensaku) != -1 || data[j].explanation.indexOf(kensaku) != -1 || data[j].proof.indexOf(kensaku) != -1 || data[j].remarks.indexOf(kensaku) != -1) {
+
+                result.innerHTML += '<div class="table">' + '<div class="item_title">' + data[j].title + '</div>' + '<div class="item_ex' + j + '"></div>' + '</div>';
+
+                let item_ex = [];
+
+                item_ex[j] = document.querySelector(".item_ex" + j);
+
+                katex.render(data[j].explanation, item_ex[j], { throwOnError: false });
+
+                count += 1;
+
+
+              } else {
+
+              };
+
+            };
+
+            resultCount.innerHTML = '<b>' + count + '</b> 件見つかりました（' + max + '件中）';
+
+          } else {
+
+            window.location.reload();
+          };
+
+        }
+
+      );
 
     </script>
 
